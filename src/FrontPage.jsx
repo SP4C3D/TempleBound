@@ -1,15 +1,19 @@
-import './style.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 
 export default function FrontPage() {
-  function startGame() {
-    // Navigate to the game (replace with React Router later)
-    window.location.href = "/TempleBound";
+  const navigate = useNavigate();
+
+  function handleStartClick() {
+    navigate("/TempleBound");
   }
 
   return (
     <div className="front-page">
-      <div className="logo">TempleBound</div>
-      <button onClick={startGame}>Start</button>
+      <img className="logo" src="/Assets/Logo.png" alt="Game Logo" />
+      <h1>TempleBound</h1>
+      <button onClick={handleStartClick}>Start Game</button>
     </div>
   );
 }
