@@ -33,7 +33,7 @@ body {
 }
 
 #game-box {
-    background-image: url('Assets/bgGame.jpg');
+    background-image: url('./public/assets/bgGame.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
