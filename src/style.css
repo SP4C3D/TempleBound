@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap');
 
 body {
-    background-image: url('Assets/Background2.gif');
+    background-image: url('assets/Background2.gif');
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -33,7 +33,7 @@ body {
 }
 
 #game-box {
-    background-image: url('./public/assets/bgGame.jpg');
+    background-image: url('assets/bgGame.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
