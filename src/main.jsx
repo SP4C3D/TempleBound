@@ -8,7 +8,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<FrontPage />} />
+        <Route path="/" element={<App />} />
         <Route path="/TempleBound" element={<TempleBound />} />
       </Routes>
     </BrowserRouter>
