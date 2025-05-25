@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import GameMap from "./components/GameMap";
 import StatsPanel from "./components/StatsPanel";
 import ActivityPanel from "./components/ActivityPanel";
-import GameOverScreen from "./components/GameOverScreen";
-import Timer from "./components/Timer";
 
 function StartScreen({ onStart }) {
-  const characters = ["Frisk", "Chara", "Asriel"];
+  const characters = ["Frisk", "Chara"];
   const [index, setIndex] = useState(0);
   const [name, setName] = useState("");
 
@@ -19,10 +17,10 @@ function StartScreen({ onStart }) {
   return (
     <div className="start-screen text-center" style={{ padding: "2rem", color: "white" }}>
       <h1 className="mb-3" style={{ fontFamily: 'PressStart2P, monospace' }}>TempleBound</h1>
-      <img src="/Assets/logo.png" alt="logo" style={{ width: 100, height: 100 }} className="mb-4" />
+      <img src="/assets/Logo.png" alt="logo" style={{ width: 100, height: 100 }} className="mb-4" />
       <div className="d-flex justify-content-center align-items-center mb-4">
         <button className="btn btn-outline-light me-2" onClick={handlePrev}>⟵</button>
-        <img src={`/Assets/${selected}/standdown.gif`} alt={selected} style={{ width: 100, height: 100 }} />
+        <img src={`/assets/${selected}/down.gif`} alt={selected} style={{ width: 100, height: 100 }} />
         <button className="btn btn-outline-light ms-2" onClick={handleNext}>⟶</button>
       </div>
       <input
