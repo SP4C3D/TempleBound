@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import GameMap from "./components/GameMap";
 import StatsPanel from "./components/StatsPanel";
 import ActivityPanel from "./components/ActivityPanel";
+import Timer from "./components/Timer";
 
 function StartScreen({ onStart }) {
   const characters = ["Frisk", "Chara"];
@@ -74,7 +75,7 @@ export default function App() {
         <GameOverScreen />
       ) : (
         <>
-          <Timer />
+          <Timer username={username} />
           <StatsPanel {...{ food, energy, hygiene, mood, money }} />
           <GameMap updateStats={updateStats} checkGameOver={checkGameOver} character={character} />
           <ActivityPanel updateStats={updateStats} checkGameOver={checkGameOver} />

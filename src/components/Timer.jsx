@@ -1,32 +1,30 @@
+// Timer.jsx
 import React, { useEffect, useState } from "react";
 
-export default function Timer() {
-  const [count, setCount] = useState(0);
-  const [day, setDay] = useState(1);
-  const [hour, setHour] = useState(0);
-  const [minute, setMinute] = useState(0);
+export default function Timer({ username }) {
+  const [startTime] = useState(new Date());
+  const [virtualTime, setVirtualTime] = useState(new Date(startTime));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
+      setVirtualTime((prev) => new Date(prev.getTime() + 60000)); // +1 minute
+    }, 1000); // every second
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const totalMinutes = count;
-    const newDay = Math.floor(totalMinutes / 1440) + 1;
-    const newHour = Math.floor((totalMinutes % 1440) / 60);
-    const newMinute = totalMinutes % 60;
+  const hour = virtualTime.getHours();
+  const minute = virtualTime.getMinutes();
+  const day = Math.floor((virtualTime - startTime) / (1000 * 60 * 1440)) + 1;
 
-    setDay(newDay);
-    setHour(newHour);
-    setMinute(newMinute);
-  }, [count]);
+  let greeting;
+  if (hour < 12) greeting = "Good morning";
+  else if (hour < 18) greeting = "Good afternoon";
+  else greeting = "Good evening";
 
   return (
-    <div className="timer">
-      Day {day} | {String(hour).padStart(2, "0")}:{String(minute).padStart(2, "0")}
+    <div className="timer text-center">
+      <h4>{greeting}, {username}!</h4>
+      <p>Day {day} | {String(hour).padStart(2, '0')}:{String(minute).padStart(2, '0')}</p>
     </div>
   );
 }
