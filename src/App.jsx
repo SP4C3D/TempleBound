@@ -1,5 +1,5 @@
 // App.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import GameMap from "./components/GameMap";
 import StatsPanel from "./components/StatsPanel";
 import ActivityPanel from "./components/ActivityPanel";
@@ -7,64 +7,35 @@ import GameOverScreen from "./components/GameOverScreen";
 import Timer from "./components/Timer";
 
 function StartScreen({ onStart }) {
+  const characters = ["Frisk", "Chara", "Asriel"];
+  const [index, setIndex] = useState(0);
   const [name, setName] = useState("");
-  const [character, setCharacter] = useState("Frisk");
+
+  const handleNext = () => setIndex((prev) => (prev + 1) % characters.length);
+  const handlePrev = () => setIndex((prev) => (prev - 1 + characters.length) % characters.length);
+
+  const selected = characters[index];
 
   return (
-    <div className="start-screen" style={{ padding: "2rem" }}>
-      <h2>Welcome to the Game</h2>
-      <label>
-        Enter your name:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Choose character:
-        <select value={character} onChange={(e) => setCharacter(e.target.value)}>
-          <option value="Frisk">Frisk</option>
-          <option value="Chara">Chara</option>
-          <option value="Asriel">Asriel</option>
-        </select>
-      </label>
-      <br />
-      <button onClick={() => onStart(name, character)}>Start Game</button>
+    <div className="start-screen text-center" style={{ padding: "2rem", color: "white" }}>
+      <h1 className="mb-3" style={{ fontFamily: 'PressStart2P, monospace' }}>TempleBound</h1>
+      <img src="/Assets/logo.png" alt="logo" style={{ width: 100, height: 100 }} className="mb-4" />
+      <div className="d-flex justify-content-center align-items-center mb-4">
+        <button className="btn btn-outline-light me-2" onClick={handlePrev}>⟵</button>
+        <img src={`/Assets/${selected}/standdown.gif`} alt={selected} style={{ width: 100, height: 100 }} />
+        <button className="btn btn-outline-light ms-2" onClick={handleNext}>⟶</button>
+      </div>
+      <input
+        type="text"
+        className="form-control w-50 mx-auto mb-3"
+        placeholder="Enter your name here"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <button className="btn btn-primary" onClick={() => onStart(name, selected)}>Choose</button>
     </div>
   );
 }
-
-function GameOverScreen() {
-  return (
-    <div className="game-over" style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>Game Over</h1>
-      <p>Your stats dropped too low!</p>
-    </div>
-  );
-}
-
-import { format } from "date-fns";
-
-function Timer() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const totalMinutes = count;
-  const day = Math.floor(totalMinutes / 1440) + 1;
-  const time = new Date(0, 0, 0, 0, totalMinutes % 1440);
-
-  return (
-    <div className="timer">
-      Day {day} | {format(time, "HH:mm")}
-    </div>
-  );
-}
-
-
 
 export default function App() {
   const [started, setStarted] = useState(false);
@@ -97,9 +68,9 @@ export default function App() {
     setStarted(true);
   };
 
-  return !started ? (
-    <StartScreen onStart={handleStart} />
-  ) : (
+  if (!started) return <StartScreen onStart={handleStart} />;
+
+  return (
     <div className="app">
       {gameOver ? (
         <GameOverScreen />
@@ -107,9 +78,8 @@ export default function App() {
         <>
           <Timer />
           <StatsPanel {...{ food, energy, hygiene, mood, money }} />
-          <GameMap updateStats={updateStats} checkGameOver={checkGameOver} />
+          <GameMap updateStats={updateStats} checkGameOver={checkGameOver} character={character} />
           <ActivityPanel updateStats={updateStats} checkGameOver={checkGameOver} />
-          <p>Character: {character}</p>
         </>
       )}
     </div>
