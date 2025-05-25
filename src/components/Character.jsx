@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function Character({ updateStats, checkGameOver }) {
+export default function Character({ updateStats, checkGameOver, character }) {
   const [x, setX] = useState(200);
   const [y, setY] = useState(200);
   const [direction, setDirection] = useState("standdown");
@@ -47,7 +47,7 @@ export default function Character({ updateStats, checkGameOver }) {
 
   return (
     <img
-      src={`/Assets/Frisk/${direction}.gif`}
+      src={`/assets/${character}/${direction}.gif`}
       alt="character"
       style={{ position: "absolute", left: x, top: y, width: "50px", height: "50px" }}
     />
