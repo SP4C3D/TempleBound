@@ -1,0 +1,69 @@
+.start-screen h1 {
+  margin-bottom: 1rem;
+  font-family: 'PressStart2P', monospace;
+}
+
+.start-screen img{
+  width: 150px;
+  height: 150px;
+  margin-bottom: 1.5rem;
+}
+
+#CharacterSelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-control.w-75.w-md-50.mx-auto.mb-3 {
+  max-width: 350px;
+}
+
+.btn.btn-outline-light.me-2.flex-shrink-0{
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.5rem;
+}
+
+.btn.btn-outline-light.ms-2.flex-shrink-0 {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.5rem;
+}
+
+.btn.btn-primary.w-100.w-md-auto {
+    max-width: 250px;
+}
+
+.character-img-wrapper {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.character-img-wrapper img {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.fade-bg {
+  transition: background-image 0.3s, filter 0.3s;
+  filter: brightness(0.7);
+}
+
+.fade-char img {
+  opacity: 0;
+}
+
+.form-control.w-50.mx-auto.mb-3 {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+}
