@@ -1,43 +1,41 @@
 import React, { useEffect, useState } from "react";
 
 export default function Character({ updateStats, checkGameOver, character }) {
-  const [x, setX] = useState(200);
-  const [y, setY] = useState(200);
+  const [position, setPosition] = useState({ x: 5, y: 5 });
   const [direction, setDirection] = useState("standdown");
 
-  const speed = 5;
+  const speed = 0.5; // movement in percent
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      const key = e.key.toLowerCase();
       let moved = false;
-      switch (e.key) {
-        case "ArrowUp":
-        case "w":
-          setY((y) => y - speed);
+
+      setPosition((prev) => {
+        let newX = prev.x;
+        let newY = prev.y;
+
+        if (key === "arrowup" || key === "w") {
+          newY = Math.max(0, newY - speed);
           setDirection("up");
           moved = true;
-          break;
-        case "ArrowDown":
-        case "s":
-          setY((y) => y + speed);
+        } else if (key === "arrowdown" || key === "s") {
+          newY = Math.min(95, newY + speed);
           setDirection("down");
           moved = true;
-          break;
-        case "ArrowLeft":
-        case "a":
-          setX((x) => x - speed);
+        } else if (key === "arrowleft" || key === "a") {
+          newX = Math.max(0, newX - speed);
           setDirection("left");
           moved = true;
-          break;
-        case "ArrowRight":
-        case "d":
-          setX((x) => x + speed);
+        } else if (key === "arrowright" || key === "d") {
+          newX = Math.min(95, newX + speed);
           setDirection("right");
           moved = true;
-          break;
-        default:
-          break;
-      }
+        }
+
+        return { x: newX, y: newY };
+      });
+
       if (moved) checkGameOver();
     };
 
@@ -47,9 +45,15 @@ export default function Character({ updateStats, checkGameOver, character }) {
 
   return (
     <img
-      src={`/assets/${character}/${direction}.gif`}
+      src={`/Assets/${character}/${direction}.gif`}
       alt="character"
-      style={{ position: "absolute", left: x, top: y, width: "50px", height: "50px" }}
+      style={{
+        position: "absolute",
+        top: `${position.y}%`,
+        left: `${position.x}%`,
+        width: "5%",
+        transition: "top 0.1s, left 0.1s",
+      }}
     />
   );
 }
