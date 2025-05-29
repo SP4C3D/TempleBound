@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-export default function GameArena({character}){
+import GameOverScreen from "./GameOverScreen";
+export default function GameArena({character, gameOver}){
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },     // Pixel position (for movement calculations)
     percent: { x: 0, y: 0 }   // Percentage position (for rendering)
@@ -22,6 +23,7 @@ export default function GameArena({character}){
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      if (gameOver) return;
       const key = e.key;
       if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
         setKeys(prevKeys => ({ ...prevKeys, [key]: true }));
@@ -42,13 +44,14 @@ export default function GameArena({character}){
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [gameOver]);
 
   const speed = 1;
 
   useEffect(() => {
     let animationFrameId;
     const gameLoop = () => {
+      if(gameOver) return;
       setCharPosition(prev => {
         const gameContainer = document.getElementById('game-box');
         if (!gameContainer) return prev;
@@ -86,7 +89,7 @@ export default function GameArena({character}){
 
     gameLoop();
     return () => cancelAnimationFrame(animationFrameId);
-  }, [keys]);
+  }, [keys, gameOver]);
 
   return (
     <div className="game-wrapper">
@@ -99,10 +102,12 @@ export default function GameArena({character}){
         <div id="Temple" className="location position-absolute ratio ratio-1x1" style={{ top: "24%", left: "42%", width: "11%" }}></div>
         <div id="Time Chamber" className="location position-absolute ratio ratio-1x1" style={{ top: "37%", left: "1%", width: "8%" }}></div>
         <div id="Cheat Trigger" className="location position-absolute ratio ratio-1x1" style={{ top: "0%", left: "98%", width: "2%" }}></div>
-        <div id="gameover" className="position-absolute top-0 end-0 bottom-0 start-0 bg-dark bg-opacity-75 d-none">
-          <img src="Assets/gameover.png" alt="Game Over" className="position-absolute top-50 start-50 translate-middle" style={{ width: "40%" }} />
-        </div>
       </div>
+      {gameOver && (
+        <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-75">
+          <GameOverScreen />
+        </div>
+      )}
     </div>
   );
 }
