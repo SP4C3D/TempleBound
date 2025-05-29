@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+
 import Timer from "./Timer";
 
-export default function Statusbar({ username }) {
+export default function Statusbar({ username, gameOver, setGameOver}) {
   const [startTime] = useState(new Date());
   const [virtualTime, setVirtualTime] = useState(new Date(startTime));
   const [stats, setStats] = useState({
@@ -10,23 +11,39 @@ export default function Statusbar({ username }) {
     hygiene: 100,
     mood: 100,
   });
+  
 
   useEffect(() => {
+    if (gameOver) return;
     const interval = setInterval(() => {
       // Advance virtual time by 1 minute
       setVirtualTime((prev) => new Date(prev.getTime() + 60000));
 
       // Decrease stats every virtual minute (customize as needed)
-      setStats((prev) => ({
-        food: Math.max(prev.food - 0.05, 0),
-        energy: Math.max(prev.energy - 0.1, 0),
-        hygiene: Math.max(prev.hygiene - 0.15, 0),
-        mood: Math.max(prev.mood - 0.2, 0),
-      }));
-    }, 1000); // real 1 second = virtual 1 minute
+      setStats((prev) => {
+        const updatedStats = {
+          food: Math.max(prev.food - 10, 0),
+          energy: Math.max(prev.energy - 0.3, 0),
+          hygiene: Math.max(prev.hygiene - 0.15, 0),
+          mood: Math.max(prev.mood - 0.2, 0),
+        };
+
+        if (
+          updatedStats.food <= 0 ||
+          updatedStats.energy <= 0 ||
+          updatedStats.hygiene <= 0 ||
+          updatedStats.mood <= 0
+        ) {
+          setGameOver(true);
+          clearInterval(interval);
+        }
+
+        return updatedStats;
+      });
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [gameOver]);
 
   return (
     <div className="bg-light rounded bg-opacity-50 shadow p-3 mb-3">
