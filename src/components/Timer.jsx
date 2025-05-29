@@ -1,17 +1,6 @@
-// Timer.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-export default function Timer({ username }) {
-  const [startTime] = useState(new Date());
-  const [virtualTime, setVirtualTime] = useState(new Date(startTime));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVirtualTime((prev) => new Date(prev.getTime() + 60000)); // +1 minute
-    }, 1000); // every second
-    return () => clearInterval(interval);
-  }, []);
-
+export default function Timer({ username, virtualTime, startTime }) {
   const hour = virtualTime.getHours();
   const minute = virtualTime.getMinutes();
   const day = Math.floor((virtualTime - startTime) / (1000 * 60 * 1440)) + 1;
