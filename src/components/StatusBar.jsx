@@ -22,7 +22,7 @@ export default function Statusbar({ username, gameOver, setGameOver}) {
       // Decrease stats every virtual minute (customize as needed)
       setStats((prev) => {
         const updatedStats = {
-          food: Math.max(prev.food - 10, 0),
+          food: Math.max(prev.food - 0.5, 0),
           energy: Math.max(prev.energy - 0.3, 0),
           hygiene: Math.max(prev.hygiene - 0.15, 0),
           mood: Math.max(prev.mood - 0.2, 0),

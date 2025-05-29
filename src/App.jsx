@@ -16,6 +16,7 @@ export default function App() {
     setCharacter(char);
     setStarted(true);
   }
+  const[currentLocation, setCurrentLocation] = useState(null);
 
   if (!started) return <StartScreen onStart={handleStart} />;
 
@@ -26,10 +27,10 @@ export default function App() {
           <div className="col-lg-8 col-12">
             {gameOver}
             <StatusBar username={username} gameOver={gameOver} setGameOver={setGameOver}/>
-            <GameArena character={character} gameOver={gameOver}/>
+            <GameArena character={character} gameOver={gameOver} onLocationChange={(location) => setCurrentLocation(location)}/>
           </div>
           <div className="col-lg-4 col-12">
-            <ControlActivity />
+            <ControlActivity currentLocation={currentLocation}/>
           </div>
         </div>
       </div>

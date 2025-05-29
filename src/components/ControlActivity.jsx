@@ -1,8 +1,6 @@
-export default function ControlActivity(){
-  // Assuming dpadImage is defined somewhere (e.g., imported)
+export default function ControlActivity({currentLocation}){
   const dpadImage = "/assets/dpad.png";
 
-  // Assuming mouseDown and mouseUp functions are defined elsewhere to handle D-pad interaction
   const mouseDown = (direction) => {
     console.log(`Mouse down on ${direction}`);
     // Implement logic to update 'keys' state based on D-pad input
@@ -17,7 +15,6 @@ export default function ControlActivity(){
 
   const mouseUp = (direction) => {
     console.log(`Mouse up on ${direction}`);
-    // Implement logic to update 'keys' state based on D-pad input
     switch (direction) {
       case 'dUp': setKeys(prev => ({ ...prev, w: false, ArrowUp: false })); break;
       case 'dDn': setKeys(prev => ({ ...prev, s: false, ArrowDown: false })); break;
@@ -33,13 +30,13 @@ export default function ControlActivity(){
         <div className="flex-fill">
           <h6 className="mb-1">Available Activities</h6>
         </div>
-        <div id="location-text" className="d-none pb-1">
+        <div id="location-text" className={`pb-1 ${currentLocation ? '' : 'd-none'}`}>
           <i className="fas fa-map-marker-alt"></i>
-          <span id="location-text"></span>
+          <span id="location-text">{currentLocation}</span>
         </div>
       </div>
       <div id="activity-buttons" style={{ height: "120px" }}>
-        <div id="actHome" className="d-grid d-none">
+         <div id="actHome" className={`d-grid ${currentLocation === 'Home' ? '' : 'd-none'}`}>
           <button id="btnEat" className="btn btn-sm btn-primary mb-2">Eat</button>
           <button id="btnSleep" className="btn btn-sm btn-primary mb-2">Sleep</button>
           <button id="btnChores" className="btn btn-sm btn-primary mb-2">
@@ -48,7 +45,7 @@ export default function ControlActivity(){
             </span> Do Chores
           </button>
         </div>
-        <div id="actHall" className="d-grid d-none">
+        <div id="actHall" className={`d-grid ${currentLocation === 'Hall' ? '' : 'd-none'}`}>
           <button id="btnRelax" className="btn btn-sm btn-primary mb-2">Relax</button>
           <button id="btnSweep" className="btn btn-sm btn-primary mb-2">
             <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will gain 500 money for Sweeping the hall">
@@ -61,7 +58,7 @@ export default function ControlActivity(){
             </span> Buy Merchandise
           </button>
         </div>
-        <div id="actRiverPost" className="d-grid d-none">
+        <div id="actRiverPost" className={`d-grid ${currentLocation === 'River Post' ? '' : 'd-none'}`}>
           <button id="btnSight" className="btn btn-sm btn-primary mb-2">Sightseeing</button>
           <button id="btnFish" className="btn btn-sm btn-primary mb-2">
             <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will need 500 money to go fishing">
@@ -70,7 +67,7 @@ export default function ControlActivity(){
           </button>
           <button id="btnToilet" className="btn btn-sm btn-primary mb-2">Go to Toilet</button>
         </div>
-        <div id="actGate" className="d-grid d-none">
+        <div id="actGate" className={`d-grid ${currentLocation === 'Gate' ? '' : 'd-none'}`}>
           <button id="btnPolish" className="btn btn-sm btn-primary mb-2">
             <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will get 500 money for Polishing the gate">
               <i className="fas fa-info-circle"></i>
@@ -78,12 +75,12 @@ export default function ControlActivity(){
           </button>
           <button id="btnExercise" className="btn btn-sm btn-primary mb-2">Exercise</button>
         </div>
-        <div id="actTemple" className="d-grid d-none">
+        <div id="actTemple" className={`d-grid ${currentLocation === 'Temple' ? '' : 'd-none'}`}>
           <button id="btnPray" className="btn btn-sm btn-primary mb-2">Pray</button>
           <button id="btnWash" className="btn btn-sm btn-primary mb-2">Wash</button>
           <button id="btnMeditate" className="btn btn-sm btn-primary mb-2">Meditate</button>
         </div>
-        <div id="actTime" className="d-grid d-none">
+        <div id="actTime" className={`d-grid ${currentLocation === 'Time' ? '' : 'd-none'}`}>
           <button id="btnTimeSkip" className="btn btn-sm btn-primary mb-2">Skip 23 Hours</button>
             <button id="btnRefresh" className="btn btn-sm btn-primary mb-2">Refill All Stats</button>
             <button id="btnRich" className="btn btn-sm btn-primary mb-2">
