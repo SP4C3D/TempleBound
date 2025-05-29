@@ -1,42 +1,69 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.start-screen h1 {
+  margin-bottom: 1rem;
+  font-family: 'PressStart2P', monospace;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.start-screen img{
+  width: 150px;
+  height: 150px;
+  margin-bottom: 1.5rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#CharacterSelect {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.form-control.w-75.w-md-50.mx-auto.mb-3 {
+  max-width: 350px;
 }
 
-.card {
-  padding: 2em;
+.btn.btn-outline-light.me-2.flex-shrink-0{
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.5rem;
 }
 
-.read-the-docs {
-  color: #888;
+.btn.btn-outline-light.ms-2.flex-shrink-0 {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.5rem;
+}
+
+.btn.btn-primary.w-100.w-md-auto {
+    max-width: 250px;
+}
+
+.character-img-wrapper {
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s;
+}
+
+.character-img-wrapper img {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.fade-bg {
+  transition: background-image 0.3s, filter 0.3s;
+  filter: brightness(0.7);
+}
+
+.fade-char img {
+  opacity: 0;
+}
+
+.form-control.w-50.mx-auto.mb-3 {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
 }

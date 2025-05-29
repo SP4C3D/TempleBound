@@ -23,7 +23,7 @@ export default function Timer({ username }) {
 
   return (
     <div className="timer text-center">
-      <h4>{greeting}, {username}!</h4>
+      <span>{greeting}, {username}!</span>
       <p>Day {day} | {String(hour).padStart(2, '0')}:{String(minute).padStart(2, '0')}</p>
     </div>
   );
