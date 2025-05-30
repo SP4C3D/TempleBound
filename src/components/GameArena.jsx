@@ -1,6 +1,6 @@
 // Combined GameArena Component with Game Over Support and Location Detection
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
 export default function GameArena({ character, gameOver, onLocationChange }) {
@@ -37,15 +37,36 @@ export default function GameArena({ character, gameOver, onLocationChange }) {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
-      const key = e.key.toLowerCase();
+      const key = e.key;
+      const lowerKey = key.toLowerCase();
+      if (
+        key === "ArrowUp" ||
+        key === "ArrowDown" ||
+        key === "ArrowLeft" ||
+        key === "ArrowRight"
+      ) {
+        e.preventDefault();
+      }
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => ({ ...prev, [key]: true }));
+        setIsMoving(true);
+      } else if (keys.hasOwnProperty(lowerKey)) {
+        setKeys(prev => ({ ...prev, [lowerKey]: true }));
         setIsMoving(true);
       }
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key;
+      const lowerKey = key.toLowerCase();
+      if (
+        key === "ArrowUp" ||
+        key === "ArrowDown" ||
+        key === "ArrowLeft" ||
+        key === "ArrowRight"
+      ) {
+        e.preventDefault();
+      }
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => {
           const updated = { ...prev, [key]: false };
@@ -53,15 +74,22 @@ export default function GameArena({ character, gameOver, onLocationChange }) {
           setIsMoving(stillMoving);
           return updated;
         });
+      } else if (keys.hasOwnProperty(lowerKey)) {
+        setKeys(prev => {
+          const updated = { ...prev, [lowerKey]: false };
+          const stillMoving = Object.values(updated).some(v => v);
+          setIsMoving(stillMoving);
+          return updated;
+        });
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+    window.addEventListener("keyup", handleKeyUp, { passive: false });
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown, { passive: false });
+      window.removeEventListener("keyup", handleKeyUp, { passive: false });
     };
   }, [gameOver]);
 
