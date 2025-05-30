@@ -59,10 +59,10 @@ export default function Statusbar({ username, gameOver, setGameOver}) {
       </div>
 
       <div className="row row-cols-lg-4 row-cols-2 mt-3">
-        <StatusBarItem icon="bi bi-egg-fried text-success" value={stats.food} barId="food-bar" barColor="bg-success" />
-        <StatusBarItem icon="bi bi-moon-stars text-info" value={stats.energy} barId="energy-bar" barColor="bg-info" />
-        <StatusBarItem icon="bi bi-droplet-half text-warning" value={stats.hygiene} barId="hygiene-bar" barColor="bg-warning" />
-        <StatusBarItem icon="bi bi-emoji-smile text-primary" value={stats.mood} barId="mood-bar" barColor="bg-primary" />
+        <StatusBarItem icon="fas fa-utensils text-success" value={stats.food} barId="food-bar" barColor="bg-success" />
+        <StatusBarItem icon="fas fa-bed text-info" value={stats.energy} barId="energy-bar" barColor="bg-info" />
+        <StatusBarItem icon="fas fa-star-of-life text-warning" value={stats.hygiene} barId="hygiene-bar" barColor="bg-warning" />
+        <StatusBarItem icon="fas fa-smile text-primary" value={stats.mood} barId="mood-bar" barColor="bg-primary" />
       </div>
     </div>
   );
