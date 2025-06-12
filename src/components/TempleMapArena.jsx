@@ -1,12 +1,10 @@
-// Combined GameArena Component with Game Over Support and Location Detection
-
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function GameArena({ character, gameOver, onLocationChange, entryLocation }) {
+export default function TempleMapArena({ character, gameOver, onLocationChange, onLeaveTemple }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
-    percent: { x: 0, y: 0 },
+    percent: { x: 50, y: 14 },
   });
 
   const [keys, setKeys] = useState({
@@ -30,10 +28,8 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
   }, []);
 
   const locationNames = useRef([
-    'Home', 'Hall', 'River Post', 'Gate', 'Temple', 'Time Chamber', 'Cheat Trigger'
+    'Statue', 'OldTable', 'Altar', 'Library', 'ExitTemp'
   ]);
-
-  const hasInitialized = useRef(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -69,6 +65,8 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
 
   const speed = 1 * (window.innerWidth < 768 ? 0.5 : 1);
 
+  const hasInitialized = useRef(false);
+
   useEffect(() => {
     let animationFrameId;
 
@@ -76,47 +74,23 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
       if (gameOver) return;
 
       setCharPosition(prev => {
+        if (!hasInitialized.current) {
+            hasInitialized.current = true;
+            return {
+                px: {
+                    x: gameBoxRef.current.clientWidth * 0.54,
+                    y: gameBoxRef.current.clientHeight * 0.16,
+                },
+                percent: {
+                    x: 50,
+                    y: 14,
+                }
+            };
+        }
         const gameContainer = gameBoxRef.current;
         const allRefsSet = locationNames.current.every(name => locationElementRefs.current[name]);
 
         if (!gameContainer || !allRefsSet) return prev;
-
-        if (!hasInitialized.current && entryLocation && locationElementRefs.current[entryLocation]) {
-          const gameBoxRect = gameBoxRef.current.getBoundingClientRect();
-          const boxWidth = gameBoxRef.current.clientWidth;
-          const boxHeight = gameBoxRef.current.clientHeight;
-
-          const target = locationElementRefs.current[entryLocation].getBoundingClientRect();
-          const centerX = (target.left + target.right) / 2 - gameBoxRect.left;
-          const centerY = (target.top + target.bottom) / 2 - gameBoxRect.top;
-
-          const locationOffsets = {
-            Temple: { x: -3, y: -5 }, 
-            Home: { x: -2, y: -7 },
-            "River Post" : { x: -5, y: -4 },
-          };
-
-          const offset = locationOffsets[entryLocation] || { x: 0, y: 0 };
-
-          const rawXPercent = (centerX / boxWidth) * 100;
-          const rawYPercent = (centerY / boxHeight) * 100;
-
-          const finalXPercent = Math.min(100, Math.max(0, rawXPercent + offset.x));
-          const finalYPercent = Math.min(100, Math.max(0, rawYPercent + offset.y));
-
-          hasInitialized.current = true;
-
-          return {
-            px: {
-              x: (finalXPercent / 100) * boxWidth,
-              y: (finalYPercent / 100) * boxHeight,
-            },
-            percent: {
-              x: finalXPercent,
-            y: finalYPercent,
-            }
-          };
-        }
 
         const containerWidth = gameContainer.clientWidth;
         const containerHeight = gameContainer.clientHeight;
@@ -182,10 +156,10 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
         });
 
         if (detectedLocation !== currentLocationName) {
-          setCurrentLocationName(detectedLocation);
-          if (onLocationChange) {
-            onLocationChange(detectedLocation);
-          }
+            setCurrentLocationName(detectedLocation);
+            if (onLocationChange) {
+                onLocationChange(detectedLocation);
+            }
         }
 
         return {
@@ -206,7 +180,7 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
 
   return (
     <div className="game-wrapper">
-      <div id="game-box" className="position-relative border rounded world" ref={gameBoxRef}>
+      <div id="game-box" className="position-relative border rounded temple" ref={gameBoxRef}>
         <img
           id="character"
           src={characterImageSrc}
@@ -216,13 +190,13 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
         />
 
         {/* Location zones */}
-        <div id="Home" ref={node => setLocationRef(node, 'Home')} className="location position-absolute" style={{ top: "13%", left: "7%", width: "6%", aspectRatio: "1" }}></div>
-        <div id="Hall" ref={node => setLocationRef(node, 'Hall')} className="location position-absolute bg-danger" style={{ bottom: "28%", left: "16%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="River Post" ref={node => setLocationRef(node, 'River Post')} className="location position-absolute" style={{ top: "42%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="Gate" ref={node => setLocationRef(node, 'Gate')} className="location position-absolute bg-danger" style={{ bottom: "13%", left: "42%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="Temple" ref={node => setLocationRef(node, 'Temple')} className="location position-absolute" style={{ top: "24%", left: "42%", width: "11%", aspectRatio: "1" }}></div>
-        <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div>
+        <div id="Statue" ref={node => setLocationRef(node, 'Statue')} className="location position-absolute bg-danger" style={{ top: "13%", left: "7%", width: "6%", aspectRatio: "1" }}></div>
+        <div id="OldTable" ref={node => setLocationRef(node, 'OldTable')} className="location position-absolute bg-danger" style={{ bottom: "28%", left: "16%", width: "7%", aspectRatio: "1" }}></div>
+        <div id="Altar" ref={node => setLocationRef(node, 'Altar')} className="location position-absolute" style={{ top: "42%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
+        <div id="Library" ref={node => setLocationRef(node, 'Library')} className="location position-absolute bg-danger" style={{ bottom: "13%", left: "42%", width: "7%", aspectRatio: "1" }}></div>
+        <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ top: "14%", left: "50%", width: "11%", aspectRatio: "1" }}></div>
+        {/* // <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
+        // <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div> */}
 
         {/* Game over screen overlay */}
         {gameOver && <GameOverScreen />}

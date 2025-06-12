@@ -2,44 +2,20 @@ import React, { useEffect, useState } from "react";
 
 import Timer from "./Timer";
 
-export default function Statusbar({ username, gameOver, setGameOver}) {
+export default function StatusBar({ username, gameOver, setGameOver, money, setMoney, updateStats, stats }) {
   const [startTime] = useState(new Date());
   const [virtualTime, setVirtualTime] = useState(new Date(startTime));
-  const [stats, setStats] = useState({
-    food: 100,
-    energy: 100,
-    hygiene: 100,
-    mood: 100,
-  });
-  
 
   useEffect(() => {
     if (gameOver) return;
     const interval = setInterval(() => {
-      // Advance virtual time by 1 minute
       setVirtualTime((prev) => new Date(prev.getTime() + 60000));
 
-      // Decrease stats every virtual minute (customize as needed)
-      setStats((prev) => {
-        const updatedStats = {
-          food: Math.max(prev.food - 0.5, 0),
-          energy: Math.max(prev.energy - 0.3, 0),
-          hygiene: Math.max(prev.hygiene - 0.15, 0),
-          mood: Math.max(prev.mood - 0.2, 0),
-        };
-
-        if (
-          updatedStats.food <= 0 ||
-          updatedStats.energy <= 0 ||
-          updatedStats.hygiene <= 0 ||
-          updatedStats.mood <= 0
-        ) {
-          setGameOver(true);
-          clearInterval(interval);
-        }
-
-        return updatedStats;
-      });
+      // Call updateStats to decrement each stat
+      updateStats("food", -0.5);
+      updateStats("energy", -0.3);
+      updateStats("hygiene", -0.15);
+      updateStats("mood", -0.2);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -54,7 +30,7 @@ export default function Statusbar({ username, gameOver, setGameOver}) {
           <span id="Timer"></span>
         </div>
         <div className="text-muted small text-nowrap">
-          <i className="bi bi-coin"></i> <span id="money">1000</span>
+          <i className="fas fa-coins"></i> <span id="money">{money}</span>
         </div>
       </div>
 
