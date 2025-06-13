@@ -1,17 +1,10 @@
-// Combined GameArena Component with Game Over Support and Location Detection
-
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function GameArena({ character, gameOver, onLocationChange, entryLocation }) {
+export default function GameArena({ character, gameOver, onLocationChange, entryLocation, keys }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 0, y: 0 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -35,26 +28,22 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
 
   const hasInitialized = useRef(false);
 
+  // Handle keyboard input
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
       const key = e.key.toLowerCase();
-      if (keys.hasOwnProperty(key)) {
-        setKeys(prev => ({ ...prev, [key]: true }));
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
         setIsMoving(true);
       }
     };
 
     const handleKeyUp = (e) => {
       const key = e.key.toLowerCase();
-      if (keys.hasOwnProperty(key)) {
-        setKeys(prev => {
-          const updated = { ...prev, [key]: false };
-          const stillMoving = Object.values(updated).some(v => v);
-          setIsMoving(stillMoving);
-          return updated;
-        });
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
+        const stillMoving = Object.values(keys).some(v => v);
+        setIsMoving(stillMoving);
       }
     };
 
@@ -65,7 +54,26 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gameOver]);
+  }, [gameOver, keys]);
+
+  // Handle D-pad movement
+  useEffect(() => {
+    if (keys.w || keys.ArrowUp) {
+      setDirection("Up");
+      setIsMoving(true);
+    } else if (keys.s || keys.ArrowDown) {
+      setDirection("Down");
+      setIsMoving(true);
+    } else if (keys.a || keys.ArrowLeft) {
+      setDirection("Left");
+      setIsMoving(true);
+    } else if (keys.d || keys.ArrowRight) {
+      setDirection("Right");
+      setIsMoving(true);
+    } else {
+      setIsMoving(false);
+    }
+  }, [keys]);
 
   const speed = 1 * (window.innerWidth < 768 ? 0.5 : 1);
 
@@ -113,7 +121,7 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
             },
             percent: {
               x: finalXPercent,
-            y: finalYPercent,
+              y: finalYPercent,
             }
           };
         }
@@ -125,20 +133,17 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
         let newPxX = prev.px.x;
         let newPxY = prev.px.y;
 
+        // Movement logic (now uses both keyboard and D-pad inputs)
         if (keys.w || keys.ArrowUp) {
           newPxY -= speed;
-          setDirection("Up");
         } else if (keys.s || keys.ArrowDown) {
           newPxY += speed;
-          setDirection("Down");
         }
 
         if (keys.a || keys.ArrowLeft) {
           newPxX -= speed;
-          setDirection("Left");
         } else if (keys.d || keys.ArrowRight) {
           newPxX += speed;
-          setDirection("Right");
         }
 
         const charWidth = containerWidth * 0.05;

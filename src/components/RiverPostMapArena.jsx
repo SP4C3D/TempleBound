@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function RiverPostMapArena({ character, gameOver, onLocationChange}) {
+export default function RiverPostMapArena({ character, gameOver, onLocationChange, keys }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 20, y: 38 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -31,26 +26,22 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
     'ExitRiverPost', 'Store', 'FishingSpot', 'Placeholer'
   ]);
 
+  // Handle keyboard input
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
       const key = e.key.toLowerCase();
-      if (keys.hasOwnProperty(key)) {
-        setKeys(prev => ({ ...prev, [key]: true }));
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
         setIsMoving(true);
       }
     };
 
     const handleKeyUp = (e) => {
       const key = e.key.toLowerCase();
-      if (keys.hasOwnProperty(key)) {
-        setKeys(prev => {
-          const updated = { ...prev, [key]: false };
-          const stillMoving = Object.values(updated).some(v => v);
-          setIsMoving(stillMoving);
-          return updated;
-        });
+      if (['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'].includes(key)) {
+        const stillMoving = Object.values(keys).some(v => v);
+        setIsMoving(stillMoving);
       }
     };
 
@@ -61,10 +52,28 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [gameOver]);
+  }, [gameOver, keys]);
+
+  // Handle D-pad movement
+  useEffect(() => {
+    if (keys.w || keys.ArrowUp) {
+      setDirection("Up");
+      setIsMoving(true);
+    } else if (keys.s || keys.ArrowDown) {
+      setDirection("Down");
+      setIsMoving(true);
+    } else if (keys.a || keys.ArrowLeft) {
+      setDirection("Left");
+      setIsMoving(true);
+    } else if (keys.d || keys.ArrowRight) {
+      setDirection("Right");
+      setIsMoving(true);
+    } else {
+      setIsMoving(false);
+    }
+  }, [keys]);
 
   const speed = 1 * (window.innerWidth < 768 ? 0.5 : 1);
-
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -75,18 +84,19 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
 
       setCharPosition(prev => {
         if (!hasInitialized.current) {
-            hasInitialized.current = true;
-            return {
-                px: {
-                    x: gameBoxRef.current.clientWidth * 0.22,
-                    y: gameBoxRef.current.clientHeight * 0.48,
-                },
-                percent: {
-                    x: 0,
-                    y: 0,
-                }
-            };
+          hasInitialized.current = true;
+          return {
+            px: {
+              x: gameBoxRef.current.clientWidth * 0.22,
+              y: gameBoxRef.current.clientHeight * 0.48,
+            },
+            percent: {
+              x: 20,
+              y: 38,
+            }
+          };
         }
+
         const gameContainer = gameBoxRef.current;
         const allRefsSet = locationNames.current.every(name => locationElementRefs.current[name]);
 
@@ -99,20 +109,17 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
         let newPxX = prev.px.x;
         let newPxY = prev.px.y;
 
+        // Movement logic (now uses both keyboard and D-pad inputs)
         if (keys.w || keys.ArrowUp) {
           newPxY -= speed;
-          setDirection("Up");
         } else if (keys.s || keys.ArrowDown) {
           newPxY += speed;
-          setDirection("Down");
         }
 
         if (keys.a || keys.ArrowLeft) {
           newPxX -= speed;
-          setDirection("Left");
         } else if (keys.d || keys.ArrowRight) {
           newPxX += speed;
-          setDirection("Right");
         }
 
         const charWidth = containerWidth * 0.05;
@@ -156,10 +163,10 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
         });
 
         if (detectedLocation !== currentLocationName) {
-            setCurrentLocationName(detectedLocation);
-            if (onLocationChange) {
-                onLocationChange(detectedLocation);
-            }
+          setCurrentLocationName(detectedLocation);
+          if (onLocationChange) {
+            onLocationChange(detectedLocation);
+          }
         }
 
         return {
@@ -194,9 +201,6 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
         <div id="Store" ref={node => setLocationRef(node, 'Store')} className="location position-absolute bg-danger" style={{ bottom: "18%", left: "86%", width: "7%", aspectRatio: "1" }}></div>
         <div id="FishingSpot" ref={node => setLocationRef(node, 'FishingSpot')} className="location position-absolute" style={{ top: "32%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
         <div id="ExitRiverPost" ref={node => setLocationRef(node, 'ExitRiverPost')} className="location position-absolute bg-danger" style={{ bottom: "39%", left: "22%", width: "7%", aspectRatio: "1" }}></div>
-        {/* <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ top: "14%", left: "50%", width: "11%", aspectRatio: "1" }}></div> */}
-        {/* // <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
-        // <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div> */}
 
         {/* Game over screen overlay */}
         {gameOver && <GameOverScreen />}
