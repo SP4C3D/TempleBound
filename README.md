@@ -1,6 +1,6 @@
-# 🛕 TempleBound: Ucup Menjelajah Nusantara v2.0
+# 🛕 TempleBound
 
-**TempleBound** adalah game simulasi berbasis web di mana pemain mengendalikan karakter bernama *Ucup* untuk menjelajahi berbagai lokasi seperti rumah, gerbang, aula, sungai, dan kuil. Game ini dibuat sebagai proyek ReactJS dan menyajikan elemen gameplay yang menggabungkan eksplorasi, manajemen status, dan interaksi dengan lingkungan.
+**TempleBound** adalah game simulasi berbasis web di mana pemain mengendalikan karakter  untuk menjelajahi berbagai lokasi seperti rumah, gerbang, aula, sungai, dan kuil. Game ini dibuat sebagai proyek ReactJS dan menyajikan elemen gameplay yang menggabungkan eksplorasi, manajemen status, dan interaksi dengan lingkungan.
 
 ---
 
