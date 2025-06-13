@@ -1,9 +1,7 @@
-export default function ControlActivity({currentLocation, updateStats, mapMode, money, setMoney}){
+export default function ControlActivity({currentLocation, keys, setKeys, updateStats, mapMode, money, setMoney, triggerTransition}){
   const dpadImage = "/assets/dpad.png";
 
   const mouseDown = (direction) => {
-    console.log(`Mouse down on ${direction}`);
-    // Implement logic to update 'keys' state based on D-pad input
     switch (direction) {
       case 'dUp': setKeys(prev => ({ ...prev, w: true, ArrowUp: true })); break;
       case 'dDn': setKeys(prev => ({ ...prev, s: true, ArrowDown: true })); break;
@@ -14,7 +12,6 @@ export default function ControlActivity({currentLocation, updateStats, mapMode, 
   };
 
   const mouseUp = (direction) => {
-    console.log(`Mouse up on ${direction}`);
     switch (direction) {
       case 'dUp': setKeys(prev => ({ ...prev, w: false, ArrowUp: false })); break;
       case 'dDn': setKeys(prev => ({ ...prev, s: false, ArrowDown: false })); break;
@@ -36,41 +33,91 @@ const handleActivityClick = (activityType) => {
     case 'riverpost':
       updateStats('mapMode', 'riverPost');
       break;
+    case 'EnterGate':
+      updateStats('mapMode', 'gate');
+      break;
+    case 'EnterHall':
+      updateStats('mapMode', 'hall');
+      break;
     case 'eat':
-      updateStats('food', 20); // Increase food by 20
-      updateStats('energy', 5); // Small energy boost
+      updateStats('food', 20);
+      updateStats('energy', 5);
       break;
     case 'sleep':
-      updateStats('energy', 50); // Significant energy boost
-      updateStats('mood', 10);  // Improve mood
-      updateStats('hygiene', -10); // Maybe a little less clean after sleep
+      triggerTransition("/assets/tidur.gif", () => {
+        updateStats('energy', 50);
+        updateStats('mood', 10);  
+        updateStats('hygiene', -10);
+      });
       break;
+    case 'Sword':
+      triggerTransition("/assets/Sword.gif", () => {
+        updateStats('mood', 5);
+      });
+      break;
+    case 'polish':
+      triggerTransition("/assets/Sweep.gif", () => {
+        updateStats('hygiene', -5);
+        updateStats('energy', -5);
+        updateStats('mood', 10);
+        setMoney(prev => prev + 100);
+      });
+      break;
+    case 'sit':
+      triggerTransition("/assets/Chair.gif", () => {
+        updateStats('mood', 5);
+        updateStats('energy', 10);
+        updateStats('hygiene', -5);
+      });
     case 'chores':
-      updateStats('mood', -5); // Chores might slightly decrease mood
-      updateStats('energy', -20);
-      updateStats('hygiene', -10);
-      setMoney(prev => prev + 200); // Gain money from chores
+      triggerTransition("/assets/Sweep.gif", () => {
+        updateStats('mood', -5);
+        updateStats('energy', -20);
+        updateStats('hygiene', -10);
+        setMoney(prev => prev + 200);
+      });
       break;
     case 'pray':
-      updateStats('mood', 15); // Praying improves mood
-      updateStats('energy', -5); // Slight energy cost
+      triggerTransition("/assets/pray.gif", () => {
+        updateStats('mood', 20);
+        updateStats('energy', -5);
+      });
+      break;
+    case 'cook':
+      triggerTransition("/assets/cook.gif", () => {
+        updateStats('food', 20);
+        updateStats('energy', -10);
+        updateStats('hygiene', -5);
+      });
+    break;
+    case 'Nap':
+      triggerTransition("/assets/tidur.gif", () => {
+        updateStats('mood', 10);
+        updateStats('energy', 10);
+      });
       break;
     case 'fish':
-      const fishCaught = Math.floor(Math.random() * 5) + 1; // Random fish count
+      const fishCaught = Math.floor(Math.random() * 5) + 1;
       alert(`You caught ${fishCaught} fish!`);
-      setMoney(prev => prev + fishCaught * 50); // Gain money based on fish caught
+      setMoney(prev => prev + fishCaught * 50);
       break;
     case 'buy':
       if (money >= 500) {
-        setMoney(prev => prev - 500); // Deduct money for buying items
+        setMoney(prev => prev - 500);
         alert("You bought some items!");
       } else {
         alert("Not enough money to buy items!");
       }
       break;
+    case 'read':
+      triggerTransition("/assets/Read.gif", () => {
+        updateStats('mood', 10);
+        updateStats('energy', -5);
+      });
+      break;
     case 'pleasure':
-      updateStats('mood', 50); // Increase mood significantly
-      updateStats('energy', -20); // Decrease energy
+      updateStats('mood', 50);
+      updateStats('energy', -20);
       break;
     default:
       break;
@@ -88,45 +135,55 @@ const handleActivityClick = (activityType) => {
           <span id="location-text">{currentLocation}</span>
         </div>
       </div>
+
       <div id="activity-buttons" style={{ height: "120px" }}>
          <div id="actHome" className={`d-grid ${currentLocation === 'Home' || mapMode === 'home' ? '' : 'd-none'}`}>
           {mapMode !== 'home' &&  currentLocation === 'Home' && (
             <button id="btnHomeEnt"className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('home')}>Enter Home</button>
           )}
-          {mapMode === 'home' && currentLocation === 'ExitHome' && (
+          {mapMode === 'home' && currentLocation === 'Exit Home' && (
             <button className="btn btn-sm btn-danger mb-2" onClick={() => updateStats('mapMode', 'world')}>Leave Home</button>
           )}
           {mapMode === 'home' && currentLocation === 'Bed' && (
-            <button id="btnSleep" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('sleep')}>Sleep</button>
+              <button id="btnSleep" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('sleep')}>Sleep</button>
           )}
-          {mapMode === 'home' && currentLocation === 'Broom' && (
-            <button id="btnChores" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('chores')}>Sweep The House</button>
+          {mapMode === 'home' && currentLocation === 'Bed' && (
+            <button id="btnPray" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('pray')}>Pray</button>
+          )}
+          {mapMode === 'home' && currentLocation === 'Drawer' && (
+            <button id="btnChores" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('chores')}>Dust the Drawer</button>
+          )}
+          {mapMode === 'home' && currentLocation === 'Kitchen' && (
+            <button id="btnChores" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('cook')}>Cook & Eat</button>
           )}
         </div>
-        <div id="actHall" className={`d-grid ${currentLocation === 'Hall' ? '' : 'd-none'}`}>
-          <button id="btnRelax" className="btn btn-sm btn-primary mb-2">Relax</button>
-          <button id="btnSweep" className="btn btn-sm btn-primary mb-2">
-            <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will gain 500 money for Sweeping the hall">
-              <i className="fas fa-info-circle"></i>
-            </span> Sweep the Hall
-          </button>
-          <button id="btnMerch" className="btn btn-sm btn-primary mb-2">
-            <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will need 500 money on buying merchandise">
-              <i className="fas fa-info-circle"></i>
-            </span> Buy Merchandise
-          </button>
+
+        <div id="actHall" className={`d-grid ${currentLocation === 'Hall' || mapMode === 'hall' ? '' : 'd-none'}`}>
+          {mapMode !== 'hall' &&  currentLocation === 'Hall' && (
+            <button id="btnHallEnt"className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('EnterHall')}>Enter Hall</button>
+          )}
+          {currentLocation === 'ExitHall' && (
+            <button className="btn btn-sm btn-danger mb-2" onClick={() => updateStats('mapMode', 'world')}>Leave Hall</button>
+          )}
+          {currentLocation === 'Sword' && (
+            <button id="btnHallEnt"className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('Sword')}>Admire Sword</button>
+          )}
+          {currentLocation === 'Sofa' && (
+            <button id="btnHallEnt"className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('Nap')}>Take a Nap</button>
+          )}
         </div>
+
         <div id="actRiverPost" className={`d-grid ${currentLocation === 'River Post' || mapMode === 'riverPost' ? '' : 'd-none'}`}>
           {mapMode !== 'riverPost' && currentLocation === 'River Post' && (
             <button id="btnEntRiverPost" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('riverpost')}>Enter River Post</button>
           )}
-          {mapMode === 'riverPost' && currentLocation === 'ExitRiverPost' && (
+          {mapMode === 'riverPost' && currentLocation === 'Exit River Post' && (
             <button className="btn btn-sm btn-danger mb-2" onClick={() => updateStats('mapMode', 'world')}>Leave River Post</button>
           )}
           {mapMode === 'riverPost' && currentLocation === 'Placeholer' && (
             <button id="btnPleasure" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('pleasure')}>Pleasure</button>
           )}
-          {mapMode === 'riverPost' && currentLocation === 'FishingSpot' && (
+          {mapMode === 'riverPost' && currentLocation === 'Fishing Spot' && (
             <button id="btnFish" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('fish')}>Fish</button>
           )}
           {mapMode === 'riverPost' && currentLocation === 'Store' && (
@@ -137,26 +194,33 @@ const handleActivityClick = (activityType) => {
             </button>
           )}
         </div>
-        <div id="actGate" className={`d-grid ${currentLocation === 'Gate' ? '' : 'd-none'}`}>
-          {/* <button id="btnPolish" className="btn btn-sm btn-primary mb-2">
-            <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You will get 500 money for Polishing the gate">
-              <i className="fas fa-info-circle"></i>
-            </span> Polish the Gate
-          </button>
-          <button id="btnExercise" className="btn btn-sm btn-primary mb-2">Exercise</button> */}
+        
+        <div id="actGate" className={`d-grid ${currentLocation === 'Gate' || mapMode === 'gate' ? '' : 'd-none'}`}>
+          { mapMode !== 'gate' && currentLocation === 'Gate' && (
+          <button id="btnPolish" className="btn btn-sm btn-primary mb-2"  onClick={() => handleActivityClick('EnterGate')}>Enter Gate</button>)}
+          {currentLocation === 'ExitGate' && (
+            <button className="btn btn-sm btn-danger mb-2" onClick={() => updateStats('mapMode', 'world')}>Leave Gate</button>)}
+          {currentLocation === 'Pillar' && (
+            <button id="btnPolish" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('polish')}>Sweep Pillar</button>
+          )}
+          {currentLocation === 'Bench' && (
+            <button id='btnBench' className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('sit')}>Sit on Bench</button>
+          )}
         </div>
+
         <div id="actTemple" className={`d-grid ${currentLocation === 'Temple' || mapMode === 'temple' ? '' : 'd-none'}`}>
           {mapMode !== 'temple' && currentLocation === 'Temple' && (
-            <button id="btnEntTemple" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('temple')}> Enter Temple</button>)}
+            <button id="btnEntTemple" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('temple')}>Enter Temple</button>)}
           {mapMode === 'temple' && currentLocation === 'ExitTemp' && (
             <button className="btn btn-sm btn-danger mb-2" onClick={() => updateStats('mapMode', 'world')}>Leave Temple</button>)}
           {mapMode === 'temple' && currentLocation === 'Statue' && (
             <button id="btnStatue" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('pray')}>Pray</button>)}
           {mapMode === 'temple' && currentLocation === 'OldTable' && (
             <button id="btnChores" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('chores')}>Clean Table</button>)}
-          {mapMode === 'temple' && currentLocation === 'Altar' && (
-            <button id="btnAltar" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('pray')}>Pray at Altar</button>)}
+          {mapMode === 'temple' && currentLocation === 'Lectern' && (
+            <button id="btnAltar" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('read')}>Read</button>)}
         </div>
+
         <div id="actTime" className={`d-grid ${currentLocation === 'Time' ? '' : 'd-none'}`}>
           <button id="btnTimeSkip" className="btn btn-sm btn-primary mb-2">Skip 23 Hours</button>
             <button id="btnRefresh" className="btn btn-sm btn-primary mb-2">Refill All Stats</button>
