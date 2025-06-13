@@ -48,6 +48,7 @@ export default function InventoryModal({ items }) {
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </div>
