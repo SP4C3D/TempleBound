@@ -28,6 +28,7 @@ export default function App() {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [mapMode, setMapMode] = useState('world');
   const [worldEntryLocation, setWorldEntryLocation] = useState(null);
+  const [playTime, setPlayTime] = useState(0); // in seconds
   const [keys, setKeys] = useState({
     w: false, a: false, s: false, d: false,
     ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
@@ -71,6 +72,17 @@ export default function App() {
     };
   }, [gameOver]);
 
+  // Play time tracker
+  useEffect(() => {
+    let timer;
+    if (started && !gameOver) {
+      timer = setInterval(() => {
+        setPlayTime(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [started, gameOver]);
+
   const triggerTransition = (gifPath, callback) => {
     setIsTransitioning(true);
     setTransitionGif(gifPath);
@@ -86,6 +98,7 @@ export default function App() {
     setUsername(name);
     setCharacter(char);
     setStarted(true);
+    setPlayTime(0); // Reset play time on new game
   };
 
   const handleRetry = () => {
@@ -101,6 +114,7 @@ export default function App() {
     setCurrentLocation(null);
     setMapMode('world');
     setWorldEntryLocation(null);
+    setPlayTime(0);
     setKeys({
       w: false, a: false, s: false, d: false,
       ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
@@ -123,7 +137,8 @@ export default function App() {
         const newValue = Math.max(Math.min(prev[type] + value, 100), 0);
         const updated = { ...prev, [type]: newValue };
 
-        if (updated.food <= 0 || updated.energy <= 0 || updated.hygiene <= 0 || updated.mood <= 0) {
+        // Game over condition (only check for food and energy)
+        if (updated.food <= 0 || updated.energy <= 0) {
           setGameOver(true);
         }
 
@@ -156,7 +171,12 @@ export default function App() {
             )}
             
             {gameOver ? (
-              <GameOverScreen onRetry={handleRetry} />
+              <GameOverScreen 
+                onRetry={handleRetry}
+                money={money}
+                stats={stats}
+                playTime={playTime}
+              />
             ) : (
               <>
                 {mapMode === 'world' && (
