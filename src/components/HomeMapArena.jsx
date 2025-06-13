@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function HomeMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
+export default function HomeMapArena({ character, keys, setKeys, gameOver, onLocationChange, money, stats, playTime, onRetry }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 52, y: 71 },
@@ -196,7 +196,14 @@ export default function HomeMapArena({ character, keys, setKeys, gameOver, onLoc
         <div id="Exit Home" ref={node => setLocationRef(node, 'Exit Home')} className="location position-absolute" style={{ top: "10%", right: "26%", width: "11%", height : "13%" }}></div>
 
         {/* Game over screen overlay */}
-        {gameOver && <GameOverScreen />}
+        {gameOver && (
+          <GameOverScreen
+            onRetry={onRetry}
+            money={money}
+            stats={stats}
+            playTime={playTime}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function TempleMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
+export default function TempleMapArena({ character, keys, setKeys, gameOver, onLocationChange, money, stats, playTime, onRetry }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 50, y: 14 },
@@ -196,7 +196,14 @@ export default function TempleMapArena({ character, keys, setKeys, gameOver, onL
         <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ bottom: "16%", left: "45%", width: "10%", height: "8%" }}></div>
 
         {/* Game over screen overlay */}
-        {gameOver && <GameOverScreen />}
+        {gameOver && (
+          <GameOverScreen
+            onRetry={onRetry}
+            money={money}
+            stats={stats}
+            playTime={playTime}
+          />
+        )}
       </div>
     </div>
   );

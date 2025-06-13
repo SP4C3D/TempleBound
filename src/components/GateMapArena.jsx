@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function GateMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
+export default function GateMapArena({ character, keys, setKeys, gameOver, onLocationChange, money, stats, playTime, onRetry }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 52, y: 71 },
@@ -23,7 +23,7 @@ export default function GateMapArena({ character, keys, setKeys, gameOver, onLoc
   }, []);
 
   const locationNames = useRef([
-    'Pillar-1', 'Pillar-2', 'Bench', 'ExitGate-1', 'ExitGate-2'
+    'Pillar-1', 'Pillar-2', 'Bench', 'ExitGate-1', 'ExitGate-2', 'Bucket-2', 'Bucket-1'
   ]);
 
   useEffect(() => {
@@ -153,6 +153,8 @@ export default function GateMapArena({ character, keys, setKeys, gameOver, onLoc
                 detectedLocation = 'Pillar';
               } else if (locName.startsWith('ExitGate')) {
                 detectedLocation = 'ExitGate';
+              } else if (locName.startsWith('Bucket')) {
+                detectedLocation = 'Bucket';
               } else {
                 detectedLocation = locName;
               }
@@ -196,12 +198,21 @@ export default function GateMapArena({ character, keys, setKeys, gameOver, onLoc
         {/* Location zones */}
         <div id="Pillar-1" ref={node => setLocationRef(node, 'Pillar-1')} className="location position-absolute" style={{ top: "29%", left: "35%", width: "8%", height: "32%" }}></div>
         <div id="Pillar-2" ref={node => setLocationRef(node, 'Pillar-2')} className="location position-absolute" style={{ top: "29%", left: "58%", width: "8%", height: "32%" }}></div>
-        <div id="Bench" ref={node => setLocationRef(node, 'Bench')} className="location position-absolute bg-danger" style={{ bottom: "18%", left: "69%", width: "7%", aspectRatio: "1" }}></div>
+        <div id="Bench" ref={node => setLocationRef(node, 'Bench')} className="location position-absolute" style={{ bottom: "18%", left: "69%", width: "7%", aspectRatio: "1" }}></div>
         <div id="ExitGate-2" ref={node => setLocationRef(node, 'ExitGate-2')} className="location position-absolute" style={{ bottom: "3%", left: "46%", width: "9%", aspectRatio: "1" }}></div>
         <div id="ExitGate-1" ref={node => setLocationRef(node, 'ExitGate-1')} className="location position-absolute" style={{ top: "3%", left: "46%", width: "9%", aspectRatio: "1" }}></div>
+        <div id="Bucket-2" ref={node => setLocationRef(node, 'Bucket-2')} className="location position-absolute" style={{ top: "35%", left: "26%", width: "5%", aspectRatio: "1" }}></div>
+        <div id="Bucket-1" ref={node => setLocationRef(node, 'Bucket-1')} className="location position-absolute" style={{ bottom: "22%", left: "30%", width: "5%", aspectRatio: "1" }}></div>
 
         {/* Game over screen overlay */}
-        {gameOver && <GameOverScreen />}
+        {gameOver && (
+          <GameOverScreen
+            onRetry={onRetry}
+            money={money}
+            stats={stats}
+            playTime={playTime}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function RiverPostMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
+export default function RiverPostMapArena({ character, keys, setKeys, gameOver, onLocationChange, money, stats, playTime, onRetry }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 20, y: 38 },
@@ -190,13 +190,19 @@ export default function RiverPostMapArena({ character, keys, setKeys, gameOver, 
         />
 
         {/* Location zones */}
-        <div id="Placeholer" ref={node => setLocationRef(node, 'Placeholer')} className="location position-absolute bg-danger" style={{ top: "13%", left: "57%", width: "6%", aspectRatio: "1" }}></div>
         <div id="Store" ref={node => setLocationRef(node, 'Store')} className="location position-absolute" style={{ top: "18%", left: "20%", width: "13%", aspectRatio: "1" }}></div>
-        <div id="FishingSpot" ref={node => setLocationRef(node, 'Fishing Spot')} className="location position-absolute bg-danger" style={{ bottom: "13%", right: "28%", width: "12%", aspectRatio: "1" }}></div>
+        <div id="FishingSpot" ref={node => setLocationRef(node, 'Fishing Spot')} className="location position-absolute" style={{ bottom: "13%", right: "28%", width: "12%", aspectRatio: "1" }}></div>
         <div id="ExitRiverPost" ref={node => setLocationRef(node, 'Exit River Post')} className="location position-absolute" style={{ bottom: "5%", left: "3%", width: "17%", aspectRatio: "1" }}></div>
 
         {/* Game over screen overlay */}
-        {gameOver && <GameOverScreen />}
+        {gameOver && (
+          <GameOverScreen
+            onRetry={onRetry}
+            money={money}
+            stats={stats}
+            playTime={playTime}
+          />
+        )}
       </div>
     </div>
   );

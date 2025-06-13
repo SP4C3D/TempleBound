@@ -1,4 +1,4 @@
-export default function ControlActivity({currentLocation, updateStats, mapMode, money, setMoney, triggerTransition, keys, setKeys}){
+export default function ControlActivity({currentLocation, updateStats, mapMode, money, setMoney, triggerTransition, keys, setKeys, inventory, setInventory}) {
   const dpadImage = "/assets/dpad.png";
 
   const mouseDown = (direction) => {
@@ -100,16 +100,38 @@ const handleActivityClick = (activityType) => {
       });
       break;
     case 'fish':
-      const fishCaught = Math.floor(Math.random() * 5) + 1;
-      alert(`You caught ${fishCaught} fish!`);
-      setMoney(prev => prev + fishCaught * 50);
+      triggerTransition("/assets/pancing.gif", () => {
+        setInventory(prev => ({
+          ...prev,
+          fish: (prev.fish || 0) + 1
+        }));
+      });
       break;
     case 'buy':
       if (money >= 500) {
+      triggerTransition("/assets/trade.gif", () => {
         setMoney(prev => prev - 500);
-        alert("You bought some items!");
+        setInventory(prev => ({
+          ...prev,
+          drink: (prev.drink || 0) + 1,
+          apple: (prev.apple || 0) + 1
+        }));
+      });
       } else {
         alert("Not enough money to buy items!");
+      }
+      break;
+    case 'sell':
+      if (inventory.fish > 0) {
+      triggerTransition("/assets/trade.gif", () => {
+        setInventory(prev => ({
+          ...prev,
+          fish: prev.fish - 1
+        }));
+        setMoney(prev => prev + 100);
+      });
+      } else {
+        alert("You have no fish to sell!");
       }
       break;
     case 'read':
@@ -118,9 +140,12 @@ const handleActivityClick = (activityType) => {
         updateStats('energy', -5);
       });
       break;
-    case 'pleasure':
-      updateStats('mood', 50);
-      updateStats('energy', -20);
+    case 'wash':
+      triggerTransition("/assets/shower.gif", () => {
+        updateStats('hygiene', 20);
+        updateStats('energy', -5);
+        updateStats('mood', 5);
+      });
       break;
     default:
       break;
@@ -190,11 +215,10 @@ const handleActivityClick = (activityType) => {
             <button id="btnFish" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('fish')}>Fish</button>
           )}
           {mapMode === 'riverPost' && currentLocation === 'Store' && (
-            <button id="btnBuy" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('buy')}>
-              <span className="d-inline-block" tabIndex="0" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="hover focus" data-bs-content="You can buy items here">
-                <i className="fas fa-info-circle"></i>
-              </span> Buy Items
-            </button>
+            <button id="btnBuy" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('buy')}>Buy Items!</button>
+          )}
+          {mapMode === 'riverPost' && currentLocation === 'Store' && (
+            <button id="btnBuy" className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('sell')}>Sell Fish!</button>
           )}
         </div>
         
@@ -208,6 +232,9 @@ const handleActivityClick = (activityType) => {
           )}
           {currentLocation === 'Bench' && (
             <button id='btnBench' className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('sit')}>Sit on Bench</button>
+          )}
+          {currentLocation === 'Bucket' && (
+            <button id='btnBench' className="btn btn-sm btn-primary mb-2" onClick={() => handleActivityClick('wash')}>Quick Rinse</button>
           )}
         </div>
 
