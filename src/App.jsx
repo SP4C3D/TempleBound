@@ -28,9 +28,9 @@ export default function App() {
   const [mapMode, setMapMode] = useState('world');
   const [worldEntryLocation, setWorldEntryLocation] = useState(null);
   const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
-  });
+      w: false, a: false, s: false, d: false,
+      ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
+    });
 
   const triggerTransition = (gifPath, callback) => {
     setIsTransitioning(true);
@@ -120,7 +120,7 @@ export default function App() {
             )}
           </div>
           <div className="col-lg-4 col-12">
-            <ControlActivity currentLocation={currentLocation} keys={keys} setKeys={setKeys} updateStats={updateStats} mapMode={mapMode} money={money} setMoney={setMoney} triggerTransition={triggerTransition}/>
+            <ControlActivity currentLocation={currentLocation} updateStats={updateStats} mapMode={mapMode} money={money} setMoney={setMoney} triggerTransition={triggerTransition} keys={keys} setKeys={setKeys}/>
           </div>
         </div>
       </div>

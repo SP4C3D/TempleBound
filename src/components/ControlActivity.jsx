@@ -1,7 +1,9 @@
-export default function ControlActivity({currentLocation, keys, setKeys, updateStats, mapMode, money, setMoney, triggerTransition}){
+export default function ControlActivity({currentLocation, updateStats, mapMode, money, setMoney, triggerTransition, keys, setKeys}){
   const dpadImage = "/assets/dpad.png";
 
   const mouseDown = (direction) => {
+    console.log(`Mouse down on ${direction}`);
+    // Implement logic to update 'keys' state based on D-pad input
     switch (direction) {
       case 'dUp': setKeys(prev => ({ ...prev, w: true, ArrowUp: true })); break;
       case 'dDn': setKeys(prev => ({ ...prev, s: true, ArrowDown: true })); break;
@@ -12,6 +14,7 @@ export default function ControlActivity({currentLocation, keys, setKeys, updateS
   };
 
   const mouseUp = (direction) => {
+    console.log(`Mouse up on ${direction}`);
     switch (direction) {
       case 'dUp': setKeys(prev => ({ ...prev, w: false, ArrowUp: false })); break;
       case 'dDn': setKeys(prev => ({ ...prev, s: false, ArrowDown: false })); break;
