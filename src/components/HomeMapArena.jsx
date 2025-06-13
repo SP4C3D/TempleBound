@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function HomeMapArena({ character, gameOver, onLocationChange}) {
+export default function HomeMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 52, y: 71 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -28,14 +23,19 @@ export default function HomeMapArena({ character, gameOver, onLocationChange}) {
   }, []);
 
   const locationNames = useRef([
-    'Bed', 'Broom', 'ExitHome', 'Fridge'
+    'Bed', 'Kitchen', 'Exit Home', 'Drawer'
   ]);
+
+  useEffect(() => {
+    const isAnyKeyActive = Object.values(keys).some(v => v === true);
+    setIsMoving(isAnyKeyActive);
+  }, [keys]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => ({ ...prev, [key]: true }));
         setIsMoving(true);
@@ -43,7 +43,7 @@ export default function HomeMapArena({ character, gameOver, onLocationChange}) {
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => {
           const updated = { ...prev, [key]: false };
@@ -78,12 +78,12 @@ export default function HomeMapArena({ character, gameOver, onLocationChange}) {
             hasInitialized.current = true;
             return {
                 px: {
-                    x: gameBoxRef.current.clientWidth * 0.52,
-                    y: gameBoxRef.current.clientHeight * 0.60,
+                    x: gameBoxRef.current.clientWidth * 0.66,
+                    y: gameBoxRef.current.clientHeight * 0.19,
                 },
                 percent: {
-                    x: 52,
-                    y: 60,
+                    x: 0,
+                    y: 0,
                 }
             };
         }
@@ -190,13 +190,10 @@ export default function HomeMapArena({ character, gameOver, onLocationChange}) {
         />
 
         {/* Location zones */}
-        <div id="Bed" ref={node => setLocationRef(node, 'Bed')} className="location position-absolute bg-danger" style={{ top: "13%", left: "7%", width: "6%", aspectRatio: "1" }}></div>
-        <div id="Broom" ref={node => setLocationRef(node, 'Broom')} className="location position-absolute bg-danger" style={{ bottom: "48%", left: "86%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="Fridge" ref={node => setLocationRef(node, 'Fridge')} className="location position-absolute" style={{ top: "22%", right: "62%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="ExitHome" ref={node => setLocationRef(node, 'ExitHome')} className="location position-absolute bg-danger" style={{ bottom: "29%", left: "52%", width: "7%", aspectRatio: "1" }}></div>
-        {/* <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ top: "14%", left: "50%", width: "11%", aspectRatio: "1" }}></div> */}
-        {/* // <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
-        // <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div> */}
+        <div id="Bed" ref={node => setLocationRef(node, 'Bed')} className="location position-absolute" style={{ bottom: "10%", right: "11%", width: "28%", height: "11%" }}></div>
+        <div id="Drawer" ref={node => setLocationRef(node, 'Drawer')} className="location position-absolute" style={{ top: "12%", left: "84%", width: "7%", height: "18%" }}></div>
+        <div id="Kitchen" ref={node => setLocationRef(node, 'Kitchen')} className="location position-absolute" style={{ top: "15%", right: "62%", width: "30%",height : "30%" }}></div>
+        <div id="Exit Home" ref={node => setLocationRef(node, 'Exit Home')} className="location position-absolute" style={{ top: "10%", right: "26%", width: "11%", height : "13%" }}></div>
 
         {/* Game over screen overlay */}
         {gameOver && <GameOverScreen />}

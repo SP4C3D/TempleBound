@@ -3,15 +3,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function GameArena({ character, gameOver, onLocationChange, entryLocation }) {
+export default function GameArena({ character, keys, setKeys, gameOver, onLocationChange, entryLocation }) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 0, y: 0 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -36,10 +31,15 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
   const hasInitialized = useRef(false);
 
   useEffect(() => {
+    const isAnyKeyActive = Object.values(keys).some(v => v === true);
+    setIsMoving(isAnyKeyActive);
+  }, [keys]);
+
+  useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => ({ ...prev, [key]: true }));
         setIsMoving(true);
@@ -47,7 +47,7 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => {
           const updated = { ...prev, [key]: false };
@@ -94,6 +94,8 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
             Temple: { x: -3, y: -5 }, 
             Home: { x: -2, y: -7 },
             "River Post" : { x: -5, y: -4 },
+            Gate: { x: -2, y: -6},
+            Hall: { x: -4, y: -6},
           };
 
           const offset = locationOffsets[entryLocation] || { x: 0, y: 0 };
@@ -217,9 +219,9 @@ export default function GameArena({ character, gameOver, onLocationChange, entry
 
         {/* Location zones */}
         <div id="Home" ref={node => setLocationRef(node, 'Home')} className="location position-absolute" style={{ top: "13%", left: "7%", width: "6%", aspectRatio: "1" }}></div>
-        <div id="Hall" ref={node => setLocationRef(node, 'Hall')} className="location position-absolute bg-danger" style={{ bottom: "28%", left: "16%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="River Post" ref={node => setLocationRef(node, 'River Post')} className="location position-absolute" style={{ top: "42%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="Gate" ref={node => setLocationRef(node, 'Gate')} className="location position-absolute bg-danger" style={{ bottom: "13%", left: "42%", width: "7%", aspectRatio: "1" }}></div>
+        <div id="Hall" ref={node => setLocationRef(node, 'Hall')} className="location position-absolute" style={{ bottom: "28%", left: "16%", width: "7%", aspectRatio: "1" }}></div>
+        <div id="River Post" ref={node => setLocationRef(node, 'River Post')} className="location position-absolute bg-danger" style={{ top: "42%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
+        <div id="Gate" ref={node => setLocationRef(node, 'Gate')} className="location position-absolute" style={{ bottom: "13%", left: "42%", width: "7%", aspectRatio: "1" }}></div>
         <div id="Temple" ref={node => setLocationRef(node, 'Temple')} className="location position-absolute" style={{ top: "24%", left: "42%", width: "11%", aspectRatio: "1" }}></div>
         <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
         <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div>

@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function RiverPostMapArena({ character, gameOver, onLocationChange}) {
+export default function RiverPostMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 20, y: 38 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -28,14 +23,19 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
   }, []);
 
   const locationNames = useRef([
-    'ExitRiverPost', 'Store', 'FishingSpot', 'Placeholer'
+    'Exit River Post', 'Store', 'Fishing Spot'
   ]);
+
+  useEffect(() => {
+    const isAnyKeyActive = Object.values(keys).some(v => v === true);
+    setIsMoving(isAnyKeyActive);
+  }, [keys]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => ({ ...prev, [key]: true }));
         setIsMoving(true);
@@ -43,7 +43,7 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => {
           const updated = { ...prev, [key]: false };
@@ -78,8 +78,8 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
             hasInitialized.current = true;
             return {
                 px: {
-                    x: gameBoxRef.current.clientWidth * 0.22,
-                    y: gameBoxRef.current.clientHeight * 0.48,
+                    x: gameBoxRef.current.clientWidth * 0.05,
+                    y: gameBoxRef.current.clientHeight * 0.80,
                 },
                 percent: {
                     x: 0,
@@ -191,12 +191,9 @@ export default function RiverPostMapArena({ character, gameOver, onLocationChang
 
         {/* Location zones */}
         <div id="Placeholer" ref={node => setLocationRef(node, 'Placeholer')} className="location position-absolute bg-danger" style={{ top: "13%", left: "57%", width: "6%", aspectRatio: "1" }}></div>
-        <div id="Store" ref={node => setLocationRef(node, 'Store')} className="location position-absolute bg-danger" style={{ bottom: "18%", left: "86%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="FishingSpot" ref={node => setLocationRef(node, 'FishingSpot')} className="location position-absolute" style={{ top: "32%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="ExitRiverPost" ref={node => setLocationRef(node, 'ExitRiverPost')} className="location position-absolute bg-danger" style={{ bottom: "39%", left: "22%", width: "7%", aspectRatio: "1" }}></div>
-        {/* <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ top: "14%", left: "50%", width: "11%", aspectRatio: "1" }}></div> */}
-        {/* // <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
-        // <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div> */}
+        <div id="Store" ref={node => setLocationRef(node, 'Store')} className="location position-absolute" style={{ top: "18%", left: "20%", width: "13%", aspectRatio: "1" }}></div>
+        <div id="FishingSpot" ref={node => setLocationRef(node, 'Fishing Spot')} className="location position-absolute bg-danger" style={{ bottom: "13%", right: "28%", width: "12%", aspectRatio: "1" }}></div>
+        <div id="ExitRiverPost" ref={node => setLocationRef(node, 'Exit River Post')} className="location position-absolute" style={{ bottom: "5%", left: "3%", width: "17%", aspectRatio: "1" }}></div>
 
         {/* Game over screen overlay */}
         {gameOver && <GameOverScreen />}

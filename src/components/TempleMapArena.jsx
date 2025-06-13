@@ -1,15 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import GameOverScreen from "./GameOverScreen";
 
-export default function TempleMapArena({ character, gameOver, onLocationChange, onLeaveTemple }) {
+export default function TempleMapArena({ character, keys, setKeys, gameOver, onLocationChange}) {
   const [charPosition, setCharPosition] = useState({
     px: { x: 0, y: 0 },
     percent: { x: 50, y: 14 },
-  });
-
-  const [keys, setKeys] = useState({
-    w: false, a: false, s: false, d: false,
-    ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false,
   });
 
   const [direction, setDirection] = useState("Down");
@@ -28,14 +23,19 @@ export default function TempleMapArena({ character, gameOver, onLocationChange, 
   }, []);
 
   const locationNames = useRef([
-    'Statue', 'OldTable', 'Altar', 'Library', 'ExitTemp'
+    'Statue', 'OldTable','Lectern', 'ExitTemp'
   ]);
+
+  useEffect(() => {
+    const isAnyKeyActive = Object.values(keys).some(v => v === true);
+    setIsMoving(isAnyKeyActive);
+  }, [keys]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (gameOver) return;
 
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => ({ ...prev, [key]: true }));
         setIsMoving(true);
@@ -43,7 +43,7 @@ export default function TempleMapArena({ character, gameOver, onLocationChange, 
     };
 
     const handleKeyUp = (e) => {
-      const key = e.key.toLowerCase();
+      const key = e.key;
       if (keys.hasOwnProperty(key)) {
         setKeys(prev => {
           const updated = { ...prev, [key]: false };
@@ -78,12 +78,12 @@ export default function TempleMapArena({ character, gameOver, onLocationChange, 
             hasInitialized.current = true;
             return {
                 px: {
-                    x: gameBoxRef.current.clientWidth * 0.54,
-                    y: gameBoxRef.current.clientHeight * 0.16,
+                    x: gameBoxRef.current.clientWidth * 0.47,
+                    y: gameBoxRef.current.clientHeight * 0.72,
                 },
                 percent: {
-                    x: 50,
-                    y: 14,
+                    x: 0,
+                    y: 0,
                 }
             };
         }
@@ -190,13 +190,10 @@ export default function TempleMapArena({ character, gameOver, onLocationChange, 
         />
 
         {/* Location zones */}
-        <div id="Statue" ref={node => setLocationRef(node, 'Statue')} className="location position-absolute bg-danger" style={{ top: "13%", left: "7%", width: "6%", aspectRatio: "1" }}></div>
-        <div id="OldTable" ref={node => setLocationRef(node, 'OldTable')} className="location position-absolute bg-danger" style={{ bottom: "28%", left: "16%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="Altar" ref={node => setLocationRef(node, 'Altar')} className="location position-absolute" style={{ top: "42%", right: "12%", width: "8%", aspectRatio: "1" }}></div>
-        <div id="Library" ref={node => setLocationRef(node, 'Library')} className="location position-absolute bg-danger" style={{ bottom: "13%", left: "42%", width: "7%", aspectRatio: "1" }}></div>
-        <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ top: "14%", left: "50%", width: "11%", aspectRatio: "1" }}></div>
-        {/* // <div id="Time Chamber" ref={node => setLocationRef(node, 'Time Chamber')} className="location position-absolute bg-danger" style={{ top: "37%", left: "1%", width: "8%", aspectRatio: "1" }}></div>
-        // <div id="Cheat Trigger" ref={node => setLocationRef(node, 'Cheat Trigger')} className="location position-absolute bg-danger" style={{ top: "0%", left: "98%", width: "2%", aspectRatio: "1" }}></div> */}
+        <div id="Statue" ref={node => setLocationRef(node, 'Statue')} className="location position-absolute" style={{ top: "20%", left: "47%", width: "6%", height: "15%" }}></div>
+        <div id="OldTable" ref={node => setLocationRef(node, 'OldTable')} className="location position-absolute" style={{ bottom: "28%", right: "10%", width: "7%", height: "30%" }}></div>
+        <div id="Lectern" ref={node => setLocationRef(node, 'Lectern')} className="location position-absolute" style={{ bottom: "35%", left: "45%", width: "9%", height: "7%" }}></div>
+        <div id="ExitTemp" ref={node => setLocationRef(node, 'ExitTemp')} className="location position-absolute" style={{ bottom: "16%", left: "45%", width: "10%", height: "8%" }}></div>
 
         {/* Game over screen overlay */}
         {gameOver && <GameOverScreen />}
