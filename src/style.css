@@ -55,7 +55,15 @@ body {
 }
 
 .RiverPost{
-    background-image: url('/public/assets/MapAssets/RiverPost.png');
+    background-image: url('/public/assets/MapAssets/RiverPost.jpg');
+}
+
+.Gate{
+    background-image: url('/public/assets/MapAssets/Gate.jpg');
+}
+
+.Hall{
+    background-image: url('/public/assets/MapAssets/Hall.jpg');
 }
 
 /* Game Wrapper */
