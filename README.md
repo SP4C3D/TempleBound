@@ -45,11 +45,11 @@ Each character features custom sprite animations used throughout the game.
 
 Travel between various interconnected areas:
 
-- 🏠 Home
-- ⛩️ Temple
-- 🏛️ Hall
-- 🌊 River Post
-- 🚪 Gate
+- Home
+- Temple
+- Hall
+- River Post
+- Gate
 
 Every location contains unique activities and interactions.
 
@@ -201,29 +201,29 @@ TempleBound features multiple interconnected areas that players can explore. Eac
   <tr>
     <td align="center">
       <img src="./public/assets/MapAssets/HomePD.jpg" width="220"><br>
-      <b>🏠 Home</b>
+      <b>Home</b>
     </td>
     <td align="center">
       <img src="./public/assets/MapAssets/Temple.jpg" width="220"><br>
-      <b>⛩️ Temple</b>
+      <b>Temple</b>
     </td>
   </tr>
 
   <tr>
     <td align="center">
       <img src="./public/assets/MapAssets/Hall.jpg" width="220"><br>
-      <b>🏛️ Hall</b>
+      <b>Hall</b>
     </td>
     <td align="center">
       <img src="./public/assets/MapAssets/RiverPost.jpg" width="220"><br>
-      <b>🌊 River Post</b>
+      <b>River Post</b>
     </td>
   </tr>
 
   <tr>
     <td colspan="2" align="center">
       <img src="./public/assets/MapAssets/Gate.jpg" width="220"><br>
-      <b>🚪 Gate</b>
+      <b>Gate</b>
     </td>
   </tr>
 </table>
