@@ -394,14 +394,25 @@ Through this project, I gained practical experience in:
 
 # CHILL DUDES TEAM
 
-**Sebastian Benaya**
-**Abthal Akbar**
-**Stavey Jeremy Lahindah**
-**Devlin Valentino**
-**Yehezkiel Winata**
+TempleBound is a collaborative game development project created using React.js and Vite.
 
-Built with React.js and Vite as a game development learning project.
-Our Gameplay Walkthrough : https://www.youtube.com/watch?v=MTTpdTq95j8
+### Developers
+
+- Sebastian Benaya
+- Abthal Akbar
+- Stavey Jeremy Lahindah
+- Devlin Valentino
+- Yehezkiel Winata
+
+---
+
+## Gameplay Walkthrough
+
+Curious about the gameplay experience?
+
+Watch the full walkthrough below:
+
+https://www.youtube.com/watch?v=MTTpdTq95j8
 
 ---
 
