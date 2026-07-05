@@ -1,6 +1,16 @@
-# TempleBound
+<p align="center">
+  <img src="./public/assets/logo.png" width="250">
+</p>
 
-> A peaceful journey of survival, exploration, and self-balance.
+<h1 align="center">TempleBound</h1>
+
+<p align="center">
+  <img src="./screenshots/gameplay-banner.gif" width="900">
+</p>
+
+<p align="center">
+  <i>A peaceful journey of survival, exploration, and self-balance.</i>
+</p>
 
 TempleBound is a browser-based simulation game developed using React.js. Players take control of a wandering character exploring a temple-inspired world while managing essential needs such as food, energy, hygiene, and mood.
 
