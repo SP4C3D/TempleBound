@@ -312,7 +312,7 @@ TempleBound/
 │   │   ├── Fishing.gif
 │   │   ├── Read.gif
 │   │   ├── shower.gif
-│   │   ├── Sword.gif
+│   │   ├── cook.gif
 │   │   ├── tidur.gif
 │   │   └── trade.gif
 │
