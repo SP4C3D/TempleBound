@@ -5,7 +5,7 @@
 <h1 align="center">TempleBound</h1>
 
 <p align="center">
-  <img src="./screenshots/gameplay-banner.gif" width="900">
+  <img src="./public/assets/preview/gameplay.gif" width="900">
 </p>
 
 > A peaceful journey of survival, exploration, and self-balance.
@@ -67,7 +67,6 @@ Examples include:
 - 🎵 Playing Music
 - 🎣 Fishing
 - 📖 Reading
-- ⚔️ Training
 - 🧹 Cleaning
 
 Choosing the right activity at the right time is the key to survival.
@@ -127,7 +126,7 @@ Moving between locations triggers animated transitions, creating a smoother and 
 
 ## 1. Main Menu & Character Selection
 
-![Main Menu](./screenshots/mainmenu.gif)
+![Main Menu](./public/assets/preview/mainmenu.gif)
 
 ---
 
@@ -227,23 +226,52 @@ TempleBound features multiple interconnected areas that players can explore. Eac
     </td>
   </tr>
 </table>
+
 ---
 
 ## 4. Activity System
 
-![Activity System](./screenshots/activitysystem.gif)
+Players can perform various activities across different locations to maintain their status and survive longer.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="./public/assets/preview/eating.gif" width="400"><br><br>
+      <b>🍽️ Eating</b><br>
+      Restore food and prevent starvation.
+    </td>
+    <td align="center" width="50%">
+      <img src="./public/assets/preview/sleeping.gif" width="400"><br><br>
+      <b>😴 Sleeping</b><br>
+      Recover energy and prepare for exploration.
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./public/assets/preview/fishing.gif" width="400"><br><br>
+      <b>🎣 Fishing</b><br>
+      Collect resources and earn money.
+    </td>
+    <td align="center">
+      <img src="./public/assets/preview/bathing.gif" width="400"><br><br>
+      <b>🚿 Bathing</b><br>
+      Maintain hygiene and avoid status penalties.
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## 5. Status Management
 
-![Status Management](./screenshots/statusbar.gif)
+![Status Management](./public/assets/preview/statusbar.gif)
 
 ---
 
 ## 6. Game Over Screen
 
-![Game Over](./screenshots/gameover.gif)
+![Game Over](./public/assets/preview/gameover.gif)
 
 ---
 
@@ -364,6 +392,7 @@ During development, several gameplay systems were implemented:
 - Score Calculation System
 - Game Over Conditions
 - Animated Location Transitions
+- Mobile Support
 
 ---
 
